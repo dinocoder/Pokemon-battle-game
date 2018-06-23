@@ -12,6 +12,7 @@ player1PokemonStats = []
 #print(test.match('tempo'))
 
 # hpmodifier1 = re.compile('\d+(?=\sHP)+')
+ 
 '''
 \d+(?=\sHP)+
 \d+(?=\sAtk)+
