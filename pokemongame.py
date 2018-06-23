@@ -198,8 +198,9 @@ class pokemonstats:
   
   
   def __init__(self):
-    
+    '''
     self.movetypes = {'Tackle': 0, 'Water Gun': 10, 'Thunder Shock': 12}
+
 
     #player1 base stats
     #Add something to find level later
@@ -267,7 +268,7 @@ class pokemonstats:
     self.mudkipitem = 'Life Orb'
 
     self.a = 1
-
+'''
 
   ''' for i in range(len(computerpokemondata['abilities'])):
       self.computerpokemonability = computerpokemondata['abilities'][i]['ability']['name']

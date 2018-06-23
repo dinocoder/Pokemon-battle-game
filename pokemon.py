@@ -6,11 +6,11 @@ class Pokemon:
     def setBaseStats(self, isHP, baseStat, natureModifier, statIV, statEV, level):
         #Determines effective stat
         if isHP:
-            print(baseStat)
-            effectiveStat = ((2 * baseStat + statIV + (statEV / 4) * level) / 100) + level + 10
+            print(str(baseStat) + ' ' + str(statIV) + ' ' + str(statEV) + ' ' + str(level) + ' ')
+            effectiveStat = (((2 * baseStat + statIV + (statEV / 4)) * level) / 100) + level + 10
         else:
-            print(baseStat)
-            effectiveStat = (((2 * baseStat + statIV + (statEV / 4) * level) / 100) + 5 ) * natureModifier
+            print(str(baseStat) + ' ' + str(statIV) + ' ' + str(statEV) + ' ' + str(level) + ' ' + str(natureModifier))
+            effectiveStat = ((((2 * baseStat + statIV + (statEV / 4)) * level) / 100) + 5 ) * natureModifier
         return effectiveStat
           
 
@@ -61,12 +61,24 @@ class Pokemon:
             return [playerhp, playeratk, playerspAtk, playerdef, playerspDef, playerspeed]
 
 
+    def getLevel(self, rawpokemondata):
+        findlevel = re.compile('(?:Level: ).+')
+
+        try:
+            test = findlevel.findall(rawpokemondata)[0]:
+        except:
+            return 100
+        else:
+            return findlevel.findall(rawpokemondata)[0]
+
+
     
     #Class must take raw data as well as links
     def __init__(self, rawpokemondata, pokemonStats):
         #gets base stat
         
-        level = 100
+        level = getLevel(rawpokemondata)
+        
         natureModifer = 1
         
         EVs = self.extractEVdata(rawpokemondata, 'EV')
