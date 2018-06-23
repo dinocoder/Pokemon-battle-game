@@ -19,7 +19,7 @@ player1PokemonStats = []
 \d+(?=\sSpA)+
 \d+(?=\sSpD)+
 \d+(?=\sSpe)+
-
+ 
 '''
 player1data = """Alakazam-Mega @ Alakazite  
 Ability: Synchronize  
