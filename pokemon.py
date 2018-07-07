@@ -1,4 +1,5 @@
 import re
+import requests
 
 
 class Pokemon:
@@ -6,11 +7,9 @@ class Pokemon:
     def setBaseStats(self, isHP, baseStat, natureModifier, statIV, statEV, level):
         #Determines effective stat
         if isHP:
-            print(str(baseStat) + ' ' + str(statIV) + ' ' + str(statEV) + ' ' + str(level) + ' ')
-            effectiveStat = (((2 * baseStat + statIV + int(int(statEV) / 4)) * level) / 100) + level + 10
+            effectiveStat = int(round(((2 * baseStat + statIV + int(round((int(statEV))) / 4)) * level) / 100) + level + 10)
         else:
-            print(str(baseStat) + ' ' + str(statIV) + ' ' + str(statEV) + ' ' + str(level) + ' ' + str(natureModifier))
-            effectiveStat = int(float(((((2 * baseStat + statIV + int(int(statEV) / 4)) * level) / 100) + 5)) * natureModifier)
+            effectiveStat = int(round(((((2 * baseStat + statIV + int(round(int(statEV))) / 4)) * level) / 100) + 5) * natureModifier)
         return effectiveStat
           
 
@@ -72,10 +71,9 @@ class Pokemon:
             return findlevel.findall(rawpokemondata)[0]
 
     def getNature(self, rawpokemondata):
-        findNature = re.compile('\w*(?=\sNature)')
+        findNature = re.compile('\w+(?=\sNature)')
         #Find nature not working
-        nature = re.findall('\w*(?=\sNature)', rawpokemondata[0])
-        print(nature)
+        nature = re.findall('\w+(?=\sNature)', rawpokemondata)[0]
         natureModifier = {'hp': 1.0, 'attack': 1.0, 'defense': 1.0, 'specialAttack': 1.0, 'specialDefense': 1.0, 'speed': 1.0}
         
         if nature == 'Lonely':
@@ -90,14 +88,12 @@ class Pokemon:
         elif nature == 'Naughty':
             natureModifier['attack'] = 1.1
             natureModifier['specialDefense'] = 0.9
-            print("done")
         elif nature == 'Bold':
             natureModifier['defense'] = 1.1
             natureModifier['attack'] = 0.9
         elif nature == 'Relaxed':
             natureModifier['defense'] = 1.1
             natureModifier['speed'] = 0.9
-            print("done")
         elif nature == 'Impish':
             natureModifier['defense'] = 1.1
             natureModifier['specialAttack'] = 0.9
@@ -116,7 +112,6 @@ class Pokemon:
         elif nature == 'Naive':
             natureModifier['speed'] = 1.1
             natureModifier['specialDefense'] = 0.9
-            print("done")
         elif nature == 'Modest':
             natureModifier['specialAttack'] = 1.1
             natureModifier['attack'] = 0.9
@@ -143,6 +138,24 @@ class Pokemon:
             natureModifier['specialAttack'] = 0.9
 
         return natureModifier
+
+    def getMoves(self, rawpokemondata):
+        getmoves = re.compile('(?<=\-\s).+')
+        moveData = []
+        rawMoveList = getmoves.findall(rawpokemondata)
+        moveList = []
+
+        for i in rawMoveList:
+            fullname = (i.replace(' ', '-')).lower()
+            moveList.append(fullname[:len(fullname) - 2])  
+
+        for j in moveList:
+            print(j)
+            print('http://pokeapi.co/api/v2/move/' + j + '/')
+            moveData.append(requests.get('http://pokeapi.co/api/v2/move/' + j + '/'))
+            #Put move data through json, fix hidden power
+        return moveData
+        
     
 
     
@@ -157,7 +170,6 @@ class Pokemon:
         EVs = self.extractEVdata(rawpokemondata, 'EV')
         IVs = self.extractEVdata(rawpokemondata, 'IV')
         natureModifier = self.getNature(rawpokemondata)
-        print(natureModifier)
         
         baseHP = pokemonStats['stats'][5]['base_stat']
         baseAttack = pokemonStats['stats'][4]['base_stat']
@@ -168,6 +180,8 @@ class Pokemon:
 
         self.pokemonActiveStats = {'hp': self.setBaseStats(True, baseHP, natureModifier['hp'], IVs[0], EVs[0], level), 'attack': self.setBaseStats(False, baseAttack, natureModifier['attack'], IVs[1], EVs[1], level), 'specialAttack': self.setBaseStats(False, baseSpecialAttack, natureModifier['specialAttack'], IVs[2], EVs[2], level), 'defense': self.setBaseStats(False, baseDefense, natureModifier['defense'], IVs[3], EVs[3], level), 'specialDefense': self.setBaseStats(False, baseSpecialDef, natureModifier['specialDefense'], IVs[4], EVs[4], level), 'speed': self.setBaseStats(False, baseSpeed, natureModifier['speed'], IVs[5], EVs[5], level)}        
         print(self.pokemonActiveStats)
+        self.moves = self.getMoves(rawpokemondata)
+        print(self.moves)
         return
 
     

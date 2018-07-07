@@ -37,7 +37,7 @@ class Player:
         
 
 
-
+        '''
         #Player 1 moves
         getmoves = re.compile('(?<=\-\s).+')
         move = []
@@ -45,7 +45,7 @@ class Player:
           tempPokeMoves = playerdata[i]
           move.append(getmoves.findall(tempPokeMoves))
           #add moves to class
-
+          '''
 
 
 

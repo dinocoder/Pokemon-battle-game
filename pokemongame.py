@@ -90,7 +90,7 @@ IVs: 3 HP / 3 Atk / 3 Def / 3 SpA / 3 SpD / 3 Spe
 - Dazzling Gleam  
 - Drain Punch  
 - Facade  
-- Body Slam
+- Body Slam  
 
 Chansey @ Eviolite  
 Ability: Natural Cure  
@@ -99,7 +99,7 @@ Relaxed Nature
 - Brick Break  
 - Drain Punch  
 - Fire Blast  
-- Counter 
+- Counter  
 
 Blissey @ Choice Specs  
 Ability: Beast Boost  
@@ -134,9 +134,9 @@ Ability: Limber
 EVs: 252 Atk / 4 SpA / 252 Spe  
 Naughty Nature  
 IVs: 30 Atk  
-- Agility  
+- Agility 
 - Hidden Power [Fire]  
-- Fire Punch  
+- Fire Punch
 - Defog
 '''
 
