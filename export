@@ -1,0 +1,4 @@
+#!/bin/bash
+git add .
+git push -u https://github.com/dinocoder/Pokemon-battle-game.git origin master
+git commit -m "commit"
