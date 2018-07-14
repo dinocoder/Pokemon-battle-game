@@ -141,19 +141,28 @@ class Pokemon:
 
     def getMoves(self, rawpokemondata):
         getmoves = re.compile('(?<=\-\s).+')
-        moveData = []
+        rawMoveData = []
         rawMoveList = getmoves.findall(rawpokemondata)
         moveList = []
+        moveData = []
 
         for i in rawMoveList:
             fullname = (i.replace(' ', '-')).lower()
-            moveList.append(fullname[:len(fullname) - 2])  
+            isHiddenPower = fullname.find('[')
+            if isHiddenPower != -1:
+                fullname = fullname[:isHiddenPower]
+            moveList.append(fullname.rstrip('--'))
 
         for j in moveList:
             print(j)
-            print('http://pokeapi.co/api/v2/move/' + j + '/')
-            moveData.append(requests.get('http://pokeapi.co/api/v2/move/' + j + '/'))
-            #Put move data through json, fix hidden power
+            rawMoveData.append(requests.get('http://pokeapi.co/api/v2/move/' + j + '/').json())
+
+        for k in rawMoveData:
+            typeData = k['type']['url']
+            moveTypeIndex = typeData.find('type')
+            moveType = typeData[moveTypeIndex:].strip('type/')
+            moveData.append(dict(power = k['power'], accuracy = k['accuracy'], type = moveType, pp = int(k['pp']) * 1.6, priority = k['priority'], specification = k['damage_class']['name'], healing = k['meta']['healing'], stat_chance = k['meta']['stat_chance'], flinch_chance = k['meta']['flinch_chance'], min_hits = k['meta']['min_hits'], ailment_chance = k['meta']['ailment_chance'], crit_rate = k['meta']['crit_rate'], min_turns = k['meta']['min_turns'], max_turns = k['meta']['max_turns'], max_hits = k['meta']['max_hits'], drain = k['meta']['drain'], name = k['names'][2]['name']))
+            
         return moveData
         
     
