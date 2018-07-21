@@ -82,12 +82,13 @@ class pokemonstats:
   print(player1.playerPokemonStats)
   print(player2.playerPokemonStats)  
   
-  
+  '''
   def __init__(self):
     #unused data goes here
-  
-  
+  '''
+
 def multiplier(pokemonType, opponentType, chosenMove, pokemonstats):
+  
   #move type and stab multipliers here
   multiplier = 1
   typematchup = 1
@@ -130,18 +131,25 @@ def multiplier(pokemonType, opponentType, chosenMove, pokemonstats):
 name = input('Enter your name')
 opponentname = 'placeholder'
 #yourpokemondata = input('Enter your team data')
-
+'''
 mypokemon = yourpokemondata.split('\n\n')
 print(len(mypokemon))
 pokemonname = yourpokemondata
 #pokemonstats =
-
+'''
 
 def attack(pokemonstats):
-  computermoves(computerpokemondata, defensetype,pokemonstats1)
   extratext = ''
-extratext2 = ''
-print('A wild ' + pokemonstats.computerpokemonname + ' appeared!')
+  extratext2 = ''
+  print('A challenger approaches!')
+  print('Who will you send out first?')
+
+  playerPokemonList = '\n'
+  for i in pokemonstats.player1.pokemonNames:
+    playerPokemonList += (i + '    ')
+  print(playerPokemonList + '\n')
+  print('Type "data <Pokemon Name> to see all info about it')
+  '''
   while pokemonstats.mudkiphp > 0 and pokemonstats.computerpokemonhp > 0:
     pokemonstats.a = 1
     print('What will Mudkip do?\n')
@@ -204,39 +212,13 @@ print('A wild ' + pokemonstats.computerpokemonname + ' appeared!')
       print('You won!')
   else:
       print('You Lost!')
-  for i in pokedex_seen:
-      if i == pokemonstats.computerpokemonname:
-          notseen = False
-      if notseen:  
-        pokedex_seen.append(pokemonstats.computerpokemonname)
-    
-print('You are on an island with a Mudkip that you found that seems to like you.')
-print('But soon you realize you are stuck with nothing except a bunch of wild Pokemon around.')
-print('It seems you need to train your pokemon to find a way off the island.')
-continuegame = input('Do you want to continue?')
-if continuegame == 'yes':
-  print('Ok, great choice!')
-else:
-  print('Oh no, your Mudkip ran off and drew attention to some wild Pokemon!')
-
+  '''
 
   
 pokemonstats1 = pokemonstats()
 attack(pokemonstats1)
 
-print('What do you want to do?\n')
-print('View Pokedex')
-action = input()
-if action == 'View Pokedex':
-  print ('Seen:\n' + str(pokedex_seen))
-  print ('\nCaught:\n' + str(pokedex_caught))
-  
 
-'''if mudkipability2 == 'torrent' and pokemonstats.mudkiphp / pokemonstats.mudkipfullhp <= (1/3) and movetypes[chosenmove] == 10:
-      pokemonstats.mudkipmultiplier += 1.3
-  else:
-      pokemonstats.mudkipmultiplier = 1
-'''
 
   
   

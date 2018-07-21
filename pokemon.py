@@ -169,12 +169,11 @@ class Pokemon:
 
     
     #Class must take raw data as well as links
-    def __init__(self, rawpokemondata, pokemonStats):
+    def __init__(self, rawpokemondata, pokemonStats, pokemonName):
         #gets base stat
         
         level = self.getLevel(rawpokemondata)
-        
-        
+
         
         EVs = self.extractEVdata(rawpokemondata, 'EV')
         IVs = self.extractEVdata(rawpokemondata, 'IV')
@@ -187,6 +186,8 @@ class Pokemon:
         baseSpecialDef = pokemonStats['stats'][1]['base_stat']
         baseSpeed = pokemonStats['stats'][0]['base_stat']
 
+        self.name = pokemonName
+        self.level = level
         self.pokemonActiveStats = {'hp': self.setBaseStats(True, baseHP, natureModifier['hp'], IVs[0], EVs[0], level), 'attack': self.setBaseStats(False, baseAttack, natureModifier['attack'], IVs[1], EVs[1], level), 'specialAttack': self.setBaseStats(False, baseSpecialAttack, natureModifier['specialAttack'], IVs[2], EVs[2], level), 'defense': self.setBaseStats(False, baseDefense, natureModifier['defense'], IVs[3], EVs[3], level), 'specialDefense': self.setBaseStats(False, baseSpecialDef, natureModifier['specialDefense'], IVs[4], EVs[4], level), 'speed': self.setBaseStats(False, baseSpeed, natureModifier['speed'], IVs[5], EVs[5], level)}        
         print(self.pokemonActiveStats)
         self.moves = self.getMoves(rawpokemondata)
