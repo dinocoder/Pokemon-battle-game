@@ -6,6 +6,9 @@ import re
 from player import Player
 from pokemon import Pokemon
 import playerTeams
+import socket
+from termcolor import cprint
+
 player1pokemondata = []
 player1pokemon = []
 player1PokemonStats = []
@@ -87,7 +90,7 @@ class pokemonstats:
     #unused data goes here
   '''
 
-def multiplier(pokemonType, opponentType, chosenMove, pokemonstats):
+def multiplier(pokemonType, opponentType, move, pokemonstats):
   
   #move type and stab multipliers here
   multiplier = 1
@@ -95,7 +98,7 @@ def multiplier(pokemonType, opponentType, chosenMove, pokemonstats):
   extratext = ""
   #type matchups
   for i in opponentType:
-    typematchup *= (attacktype[i][pokemonstats.movetypes[chosenMove]])
+    typematchup *= (attacktype[i][move.type])
     
   multiplier *= typematchup
 
@@ -110,7 +113,7 @@ def multiplier(pokemonType, opponentType, chosenMove, pokemonstats):
   #STAB bonus
   counter = 0
   for k in pokemonType:
-    if pokemonstats.movetypes[chosenMove] == defensetype[pokemonType[counter]]:
+    if move.type == defensetype[opponentType[counter]]:
       multiplier *= 1.5
       counter += 1
       break
@@ -122,10 +125,21 @@ def multiplier(pokemonType, opponentType, chosenMove, pokemonstats):
       multiplier *= 1.3
     #elif pokemonstats.mudkipItem == 'Choice Band'
     
-  
-  
   return multiplier, extratext
 
+def calculateDamage(move, multiplier, attackingPokemon, defendingPokemon):
+  if move.designation == 'physical':
+    usedAttack = 'Attack'
+    usedDefense = 'Defense'
+  else:
+    usedAttack = 'specialAttack'
+    usedDefense = 'specialDefense'
+
+  multiplierResult =  multiplier(attackingPokemon.type, defendingPokemon.type, move, pokemonstats)
+    
+  damage = ((((2 * sttackingPokemon.level / 5) + 2) * move['power'] * attackingPokemon.pokemonActiveStats[usedAttack] / defendingPokemon.pokemonactiveStats[usedDefense] / 50) + 2) * multiplier
+
+  return damage 
 
 
 name = input('Enter your name')
@@ -148,27 +162,50 @@ def attack(pokemonstats):
   for i in pokemonstats.player1.pokemonNames:
     playerPokemonList += (i + '    ')
   print(playerPokemonList + '\n')
-  print('Type "data <Pokemon Name> to see all info about it')
-  '''
-  while pokemonstats.mudkiphp > 0 and pokemonstats.computerpokemonhp > 0:
-    pokemonstats.a = 1
-    print('What will Mudkip do?\n')
-    print(pokemonstats.mudkipmoves)
-    while pokemonstats.a == 1:
-      chosenmove = input()
-      try:
-        mudkipbasepower = pokemonstats.mudkipmoves2[str(chosenmove)]
-        pokemonstats.a = 0
-      except:
-        print('Enter a valid move')
-        pokemonstats.a = 1
-        break
-      
+  print('Choose a Pokemon!/nType "data <Pokemon Name> to see all info about it')
+  chosenPokemonName = input()
 
-    multiplierResult =  multiplier(pokemonstats.mudkiptype, pokemonstats.computerpokemontype, chosenmove, pokemonstats)
-    pokemonstats.mudkipmultiplier = multiplierResult[0]
+  chosenPokemon2 = random.choice(player2.playerPokemonStats)
+
+  for i in pokemonstats.player1.playerPokemonStats:
+    if i.name == chosenPokemonName:
+      chosenPokemon = i
+      break
+    
+  
+  while chosenPokemon.hp > 0 and chosenPokemon2.hp > 0:
+    print('What will ' + chosenPokemon.name + ' do? Type "switch" to switch out.\n')
+    for i in chosenPokemon.moves:
+      print(i.name)
+
+    chosenMove = input()
+    chosenMove2 = random.choice(player2.moves)
+
+    if chosenMove['priority'] > chosenMove2['priority']:
+      moveFirst = 'player1'
+    else if chosenmove['priority'] < chosenmon2['priority']:
+      moveFirst = 'player2'
+    else:
+      if chosenPokemon.pokemonActiveStats['speed'] == chosenPokemon2.pokemonActiveStats['speed']:
+        moveFirst = random.choice('player1', 'player2')
+      else if chosenPokemon.pokemonActiveStats['speed'] > chosenPokemon2.pokemonActiveStats['speed']:
+        moveFirst = 'player1'
+      if chosenPokemon.pokemonActiveStats['speed'] < chosenPokemon2.pokemonActiveStats['speed']:
+        moveFirst = 'player2'
+
+    
+    
+    
     #damage algorithm
-    mudkipdamage = ((((2 * pokemonstats.mudkiplevel / 5) + 2) * mudkipbasepower * pokemonstats.mudkipattack / pokemonstats.computerpokemondefense / 50) + 2) * pokemonstats.mudkipmultiplier
+    if moveFirst = 'player1':
+      attackingPokemon = chosenPokemon
+      defendingPokemon = chosenPokemon2
+      calculateDamage(chosenMove, multiplierResult[0], chosenPokemon, chosenPokemon2)
+    else:
+      attackingPokemon = chosenPokemon
+      defendingPokemon = chosenPokemon2
+      calculateDamage(chosenMove, multiplierResult[0], chosenPokemon, chosenPokemon2)
+      
     pokemonstats.computerpokemonhp -= mudkipdamage
     extratext = multiplierResult[1]
     print('Mudkip used ' + chosenmove + '!')
@@ -212,7 +249,6 @@ def attack(pokemonstats):
       print('You won!')
   else:
       print('You Lost!')
-  '''
 
   
 pokemonstats1 = pokemonstats()
