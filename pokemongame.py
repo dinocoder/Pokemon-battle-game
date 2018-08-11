@@ -7,7 +7,7 @@ from player import Player
 from pokemon import Pokemon
 import playerTeams
 import socket
-from termcolor import cprint
+#from termcolor import cprint
 
 player1pokemondata = []
 player1pokemon = []
@@ -24,11 +24,11 @@ player1PokemonStats = []
 \d+(?=\sSpA)+
 \d+(?=\sSpD)+
 \d+(?=\sSpe)+
- 
+
+
 '''
 player1data = playerTeams.player1data
 player2data = playerTeams.player2data
-
 #get information from api
 
 #split data for each pokemon
@@ -51,7 +51,6 @@ defensetype = {'normal': 0, 'fighting': 1, 'flying': 2, 'poison': 3, 'ground': 4
 computerpokemonabilities = []
 mudkipabilities = []
 getdata = re.compile('.+?(?=\s@|\s\()')
-
 #Extracts evs
 #Make one for IVs
 
@@ -66,13 +65,6 @@ getdata = re.compile('.+?(?=\s@|\s\()')
 
 #Add something for player 2
 #Gets pokemon stat data
-
-
-
-randompokemon = random.randint(1, 802)
-computerpokemon = requests.get('https://pokeapi.co/api/v2/pokemon/' + str(randompokemon) + '/')
-computerpokemondata = computerpokemon.json()
-
 
 
 
@@ -153,13 +145,15 @@ pokemonname = yourpokemondata
 '''
 
 def attack(pokemonstats):
+  player1 = pokemonstats.player1
+  player2 = pokemonstats.player2
   extratext = ''
   extratext2 = ''
   print('A challenger approaches!')
   print('Who will you send out first?')
 
   playerPokemonList = '\n'
-  for i in pokemonstats.player1.pokemonNames:
+  for i in player1.pokemonNames:
     playerPokemonList += (i + '    ')
   print(playerPokemonList + '\n')
   print('Choose a Pokemon!/nType "data <Pokemon Name> to see all info about it')
@@ -167,28 +161,28 @@ def attack(pokemonstats):
 
   chosenPokemon2 = random.choice(player2.playerPokemonStats)
 
-  for i in pokemonstats.player1.playerPokemonStats:
+  for i in player1.playerPokemonStats:
     if i.name == chosenPokemonName:
       chosenPokemon = i
       break
     
   
-  while chosenPokemon.hp > 0 and chosenPokemon2.hp > 0:
+  while chosenPokemon.pokemonActiveStats['hp'] > 0 and chosenPokemon2.pokemonActiveStats['hp'] > 0:
     print('What will ' + chosenPokemon.name + ' do? Type "switch" to switch out.\n')
     for i in chosenPokemon.moves:
-      print(i.name)
+      print(i['name'])
 
     chosenMove = input()
-    chosenMove2 = random.choice(player2.moves)
+    chosenMove2 = random.choice(chosenPokemon2.moves)
 
     if chosenMove['priority'] > chosenMove2['priority']:
       moveFirst = 'player1'
-    else if chosenmove['priority'] < chosenmon2['priority']:
+    elif chosenMove['priority'] < chosenMove2['priority']:
       moveFirst = 'player2'
     else:
       if chosenPokemon.pokemonActiveStats['speed'] == chosenPokemon2.pokemonActiveStats['speed']:
         moveFirst = random.choice('player1', 'player2')
-      else if chosenPokemon.pokemonActiveStats['speed'] > chosenPokemon2.pokemonActiveStats['speed']:
+      elif chosenPokemon.pokemonActiveStats['speed'] > chosenPokemon2.pokemonActiveStats['speed']:
         moveFirst = 'player1'
       if chosenPokemon.pokemonActiveStats['speed'] < chosenPokemon2.pokemonActiveStats['speed']:
         moveFirst = 'player2'
@@ -197,7 +191,7 @@ def attack(pokemonstats):
     
     
     #damage algorithm
-    if moveFirst = 'player1':
+    if moveFirst == 'player1':
       attackingPokemon = chosenPokemon
       defendingPokemon = chosenPokemon2
       calculateDamage(chosenMove, multiplierResult[0], chosenPokemon, chosenPokemon2)

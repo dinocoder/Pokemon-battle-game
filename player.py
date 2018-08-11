@@ -19,11 +19,16 @@ class Player:
           tempPokeData = playerdata[i]
           pokemonName = getdata.findall(tempPokeData)[0]
           if pokemonName.endswith('-Mega'):
-              self.pokemonNames.append(pokemonName[:-5])
+              pokemonName = pokemonName[:-5]
+              self.pokemonNames.append(pokemonName)
           else:
               self.pokemonNames.append(pokemonName)
+          print(pokemonName)
+              
           print(self.pokemonNames)
-          pokemondata.append(requests.get('http://pokeapi.co/api/v2/pokemon/' + getdata.findall(playerdata[i])[0].lower() + '/'))
+          link = 'https://pokeapi.co/api/v2/pokemon/' + pokemonName.lower() + '/'
+          print(link)
+          pokemondata.append(requests.get(link))
         for i in range(len(playerdata)):
             self.pokemonList.append(pokemondata[i].json())
 
