@@ -1,5 +1,6 @@
 import re
 import requests
+from move import Move
 
 
 class Pokemon:
@@ -138,7 +139,7 @@ class Pokemon:
             natureModifier['specialAttack'] = 0.9
 
         return natureModifier
-
+            
     def getMoves(self, rawpokemondata):
         getmoves = re.compile('(?<=\-\s).+')
         rawMoveData = []
@@ -157,17 +158,10 @@ class Pokemon:
             print(j)
             rawMoveData.append(requests.get('http://pokeapi.co/api/v2/move/' + j + '/').json())
 
-        #Something is NoneType
         for k in rawMoveData:
-            typeData = k['type']['url']
-            moveTypeIndex = typeData.find('type')
-            moveType = typeData[moveTypeIndex:].strip('type/')
-            moveData.append(dict(power = k['power'], accuracy = k['accuracy'], type = int(moveType), pp = int(k['pp']) * 1.6, priority = int(k['priority']), specification = k['damage_class']['name'], healing = int(k['meta']['healing']), stat_chance = int(k['meta']['stat_chance']),flinch_chance = int(k['meta']['flinch_chance']), min_hits = int(k['meta']['min_hits']), ailment_chance = int(k['meta']['ailment_chance']), crit_rate = int(k['meta']['crit_rate']), min_turns = int(k['meta']['min_turns']), max_turns = int(k['meta']['max_turns']), max_hits = int(k['meta']['max_hits']), drain = int(k['meta']['drain']), name = k['names'][2]['name']))
-            
-        return moveData
-        
-    
+            moveData.append(Move(k))
 
+        return moveData
     
     #Class must take raw data as well as links
     def __init__(self, rawpokemondata, pokemonStats, pokemonName):
@@ -186,7 +180,7 @@ class Pokemon:
         baseDefense = pokemonStats['stats'][2]['base_stat']
         baseSpecialDef = pokemonStats['stats'][1]['base_stat']
         baseSpeed = pokemonStats['stats'][0]['base_stat']
-
+        
         self.name = pokemonName
         self.level = level
         self.pokemonActiveStats = {'hp': self.setBaseStats(True, baseHP, natureModifier['hp'], IVs[0], EVs[0], level), 'attack': self.setBaseStats(False, baseAttack, natureModifier['attack'], IVs[1], EVs[1], level), 'specialAttack': self.setBaseStats(False, baseSpecialAttack, natureModifier['specialAttack'], IVs[2], EVs[2], level), 'defense': self.setBaseStats(False, baseDefense, natureModifier['defense'], IVs[3], EVs[3], level), 'specialDefense': self.setBaseStats(False, baseSpecialDef, natureModifier['specialDefense'], IVs[4], EVs[4], level), 'speed': self.setBaseStats(False, baseSpeed, natureModifier['speed'], IVs[5], EVs[5], level)}        
