@@ -167,24 +167,24 @@ def attack(pokemonstats):
       break
     
   
-  while chosenPokemon.pokemonActiveStats['hp'] > 0 and chosenPokemon2.pokemonActiveStats['hp'] > 0:
+  while chosenPokemon.remainingHP > 0 and chosenPokemon2.remainingHP > 0:
     print('What will ' + chosenPokemon.name + ' do? Type "switch" to switch out.\n')
     for i in chosenPokemon.moves:
-      print(i['name'])
+      print(i.name)
 
     chosenMove = input()
     chosenMove2 = random.choice(chosenPokemon2.moves)
 
-    if chosenMove['priority'] > chosenMove2['priority']:
+    if chosenMove.priortiy > chosenMove2.priority:
       moveFirst = 'player1'
-    elif chosenMove['priority'] < chosenMove2['priority']:
+    elif chosenMove.priority < chosenMove2.priority:
       moveFirst = 'player2'
     else:
-      if chosenPokemon.pokemonActiveStats['speed'] == chosenPokemon2.pokemonActiveStats['speed']:
+      if chosenPokemon.pokemonActiveStats.speed == chosenPokemon2.pokemonActiveStats.speed:
         moveFirst = random.choice('player1', 'player2')
-      elif chosenPokemon.pokemonActiveStats['speed'] > chosenPokemon2.pokemonActiveStats['speed']:
+      elif chosenPokemon.pokemonActiveStats.speed > chosenPokemon2.pokemonActiveStats.speed:
         moveFirst = 'player1'
-      if chosenPokemon.pokemonActiveStats['speed'] < chosenPokemon2.pokemonActiveStats['speed']:
+      if chosenPokemon.pokemonActiveStats.speed < chosenPokemon2.pokemonActiveStats.speed:
         moveFirst = 'player2'
 
     

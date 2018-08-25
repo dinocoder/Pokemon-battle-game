@@ -3,6 +3,7 @@ class Move:
         def __init__(self, rawMoveData):
             typeData = rawMoveData['type']['url']
             moveTypeIndex = typeData.find('type')
+            self.name = rawMoveData['names'][2]
             self.moveType = typeData[moveTypeIndex:].strip('type/')
             self.power = int(rawMoveData['power']) if rawMoveData['power'] != None else 0
             self.accuracy = int(rawMoveData['accuracy']) if rawMoveData['power'] != None else -1
